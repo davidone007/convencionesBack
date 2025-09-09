@@ -509,9 +509,75 @@ style: ajustar formato de los mappers según convención del equipo
 * `chore`: tareas de mantenimiento, dependencias o configuración.
 * `style`: cambios de estilo que no afectan la lógica.
 
+---
 
+## 🔹 15. Pull Request
+
+### 🔹 Plantilla de Pull Request (PR)
+
+**Título del PR:**
+
+```text
+<tipo>: <descripción breve de la funcionalidad o cambio>
+```
+
+**Tipos recomendados:**
+
+* `feat`: nueva funcionalidad
+* `fix`: corrección de error
+* `docs`: documentación
+* `test`: pruebas
+* `refactor`: refactorización
+* `chore`: tareas de mantenimiento
+
+**Ejemplo de título:**
+
+```text
+feat: agregar mapper para convertir User a UserDTO
+```
 
 ---
+
+**Descripción del PR:**
+
+1. **Resumen del cambio:**
+
+```text
+<Breve explicación de lo que hace este PR y por qué es necesario>
+```
+
+2. **Cambios realizados:**
+
+```text
+- <Archivo1>: <descripción del cambio>
+- <Archivo2>: <descripción del cambio>
+- <Archivo3>: <descripción del cambio>
+```
+
+3. **Cómo probarlo:**
+
+```text
+- <Instrucciones para ejecutar pruebas unitarias>
+- <Instrucciones para probar la funcionalidad manualmente>
+```
+
+4. **Notas adicionales:**
+
+```text
+- <Notas sobre migraciones, dependencias, PRs relacionados, etc.>
+```
+
+---
+
+**Checklist recomendado:**
+
+* [ ] Código probado y compilado correctamente
+* [ ] Pruebas unitarias agregadas o actualizadas
+* [ ] Documentación actualizada (si aplica)
+* [ ] Revisado por al menos un compañero del equipo
+
+
+
 
 
 
