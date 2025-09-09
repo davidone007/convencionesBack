@@ -4,6 +4,12 @@ Este documento define las **mejores prácticas y convenciones** para desarrollar
 
 ---
 
+
+**⚠️ NOTA: TODO EL CÓDIGO, COMENTARIOS Y DOCUMENTACIÓN DEBEN ESTAR ESCRITOS EN INGLÉS. ESTO INCLUYE TODAS LAS CLASES, MÉTODOS, VARIABLES, DTOs, EXCEPCIONES, CONTROLLER ADVICE Y CUALQUIER DOCUMENTACIÓN DEL CODIGO. NO SE DEBE USAR ESPAÑOL NI OTRO IDIOMA EN NINGUNA PARTE DEL CÓDIGO O COMENTARIOS. ⚠️**
+
+---
+
+
 # 📑 Librerías y Dependencias Recomendadas
 
 * **Java 17**: Versión LTS, estable y compatible con Spring Boot 3.5.5.
