@@ -473,18 +473,37 @@ export JWT_SECRET=mi_secreto
 
 ---
 
+Perfecto, Davide. Aquí tienes una versión más específica para **commits en español**, siguiendo tu formato y con ejemplos claros de lo que se podría hacer en un proyecto Spring Boot usando MapStruct:
+
+---
+
 ## 🔹 14. Commits
 
 **Explicación:**
 
-* Convención de commits para mantener claridad en el historial del equipo:
+* Convención de commits para mantener claridad en el historial del equipo. Usar **verbos en infinitivo en español** y ser concisos pero claros:
 
 ```text
-feat: agregar endpoint de creación de usuario
-fix: corregir validación de email
-docs: documentar API con Swagger
-test: añadir pruebas unitarias para UsuarioService
+feat: agregar mapper para convertir User a UserDTO
+fix: corregir mapeo de fecha en UserMapper
+docs: documentar uso de MapStruct en README
+test: añadir pruebas unitarias para UserMapper
+refactor: renombrar campo 'nombreUsuario' a 'username' en DTO
+chore: actualizar dependencias de MapStruct
+style: ajustar formato de los mappers según convención del equipo
 ```
+
+**Recomendaciones:**
+
+* `feat`: nuevas funcionalidades o mapeos.
+* `fix`: corrección de errores en mappers o DTOs.
+* `docs`: documentación sobre mapeo o uso de DTOs/entidades.
+* `test`: pruebas unitarias o de integración de mappers.
+* `refactor`: cambios de estructura de código sin alterar funcionalidad.
+* `chore`: tareas de mantenimiento, dependencias o configuración.
+* `style`: cambios de estilo que no afectan la lógica.
+
+
 
 ---
 
