@@ -567,6 +567,101 @@ feat: agregar mapper para convertir User a UserDTO
 - <Notas sobre migraciones, dependencias, PRs relacionados, etc.>
 ```
 
+## 🔹 16. Ramas (Branching Strategy)
+
+**Explicación:**  
+El manejo de ramas debe ser **claro, consistente y alineado con la convención de commits**.  
+Los nombres de ramas usarán los mismos **prefijos** que los commits (`feat`, `fix`, `docs`, `test`, `refactor`, `chore`, `style`), seguidos de una descripción en **kebab-case**.
+
+---
+
+### 🌱 Tipos de ramas:
+
+- **`main`**  
+  Rama estable y en producción. Solo recibe merges desde `dev` o ramas de `hotfix/*`.
+
+- **`dev`**  
+  Rama de integración donde se juntan todas las funcionalidades antes de pasar a producción.
+
+- **`feat/*`**  
+  Para nuevas funcionalidades. Siempre parte de `dev`.  
+  Ejemplo: `feat/user-authentication`
+
+- **`fix/*`**  
+  Para corrección de errores encontrados en `dev`.  
+  Ejemplo: `fix/login-validation`
+
+- **`hotfix/*`**  
+  Para arreglos urgentes en producción (`main`).  
+  Ejemplo: `hotfix/nullpointer-on-order`
+
+- **`docs/*`**  
+  Para cambios o mejoras en la documentación.  
+  Ejemplo: `docs/update-readme`
+
+- **`test/*`**  
+  Para creación o ajuste de pruebas unitarias/integración.  
+  Ejemplo: `test/user-service-unit`
+
+- **`refactor/*`**  
+  Para cambios de estructura interna sin alterar la lógica.  
+  Ejemplo: `refactor/rename-user-fields`
+
+- **`chore/*`**  
+  Para tareas de mantenimiento o configuraciones.  
+  Ejemplo: `chore/update-dependencies`
+
+- **`style/*`**  
+  Para ajustes de formato y estilo (sin cambios en la lógica).  
+  Ejemplo: `style/format-controllers`
+
+---
+
+### 🔧 Flujo recomendado:
+
+1. Crear rama desde `dev`:
+   ```bash
+   git checkout dev
+   git pull origin dev
+   git checkout -b feat/user-authentication
+   ```
+
+2. Hacer commits siguiendo la convención:
+```bash
+feat: agregar autenticación de usuarios con JWT
+```
+
+3. Subir la rama:
+
+```bash
+git push origin feat/user-authentication
+```
+
+4. Crear Pull Request hacia dev.
+
+5. Tras aprobar el PR, hacer merge y eliminar la rama:
+
+```bash
+git branch -d feat/user-authentication
+git push origin --delete feat/user-authentication
+```
+
+## 📌 Buenas prácticas:
+
+Un cambio → una rama.
+Evitar mezclar varias cosas en la misma rama.
+
+Nombres en inglés y kebab-case.
+Ej: feat/add-user-endpoint, fix/date-mapper.
+
+Actualizar antes de empezar a trabajar:
+```bash
+git checkout dev
+git pull origin dev
+```
+
+Nunca trabajar directo en main.
+
 ---
 
 **Checklist recomendado:**
