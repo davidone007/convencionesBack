@@ -104,18 +104,17 @@ private String User_Name;
 **Explicación:**
 
 * Usar **verbos HTTP correctos** (`GET`, `POST`, `PUT`, `DELETE`).
-* Prefijo de API: `/api/v1/`.
 * Usar **plural en inglés** para recursos.
 * ❌ No usar verbos en las URLs (`/createUser`).
 
 **Ejemplo conceptual:**
 
 ```http
-GET    /api/v1/users        → listar todos los usuarios
-GET    /api/v1/users/{id}   → obtener un usuario por ID
-POST   /api/v1/users        → crear un usuario
-PUT    /api/v1/users/{id}   → actualizar un usuario
-DELETE /api/v1/users/{id}   → eliminar un usuario
+GET    /users        → listar todos los usuarios
+GET    /users/{id}   → obtener un usuario por ID
+POST   /users        → crear un usuario
+PUT    /users/{id}   → actualizar un usuario
+DELETE /users/{id}   → eliminar un usuario
 ```
 
 ---
