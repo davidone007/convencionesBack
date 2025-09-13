@@ -4,16 +4,15 @@ Este documento define las **mejores prácticas y convenciones** para desarrollar
 
 ---
 
-
 **⚠️ NOTA: TODO EL CÓDIGO, COMENTARIOS Y DOCUMENTACIÓN DEBEN ESTAR ESCRITOS EN INGLÉS. ESTO INCLUYE TODAS LAS CLASES, MÉTODOS, VARIABLES, DTOs, EXCEPCIONES, CONTROLLER ADVICE Y CUALQUIER DOCUMENTACIÓN DEL CODIGO. NO SE DEBE USAR ESPAÑOL NI OTRO IDIOMA EN NINGUNA PARTE DEL CÓDIGO O COMENTARIOS. ⚠️**
 
 ---
-
 
 # 📑 Librerías y Dependencias Recomendadas
 
 * **Java 17**: Versión LTS, estable y compatible con Spring Boot 3.5.5.
 * **Spring Boot 3.5.5**: Framework para desarrollo de aplicaciones Java, con soporte completo para REST, seguridad, testing y más.
+* **Gradle**: Sistema de construcción moderno que utiliza Groovy/Kotlin DSL para la configuración del proyecto.
 
 **Librerías principales y su uso:**
 
@@ -34,25 +33,23 @@ Este documento define las **mejores prácticas y convenciones** para desarrollar
 
 ---
 
-
-
 ## 📂 1. Estructura de Carpetas
 
 **Explicación:**
 La estructura de carpetas organiza el proyecto para mantenerlo **ordenado y escalable**. Cada carpeta tiene un propósito claro.
 
-| Carpeta                   | Propósito                                              | Ejemplo / Nota                                                  |
-| ------------------------- | ------------------------------------------------------ | --------------------------------------------------------------- |
-| `config/`                 | Configuraciones globales como seguridad, CORS, Swagger | `SecurityConfig.java`, `SwaggerConfig.java`                     |
-| `controller/`             | Controladores REST que exponen los endpoints           | `UsuarioController.java`                                        |
-| `dto/`                    | Objetos de transferencia de datos (Request / Response) | `UsuarioRequest.java`, `UsuarioResponse.java`                   |
-| `exception/`              | Manejo centralizado de errores                         | `GlobalExceptionHandler.java`, `ResourceNotFoundException.java` |
-| `mapper/`                 | Conversión entre DTO y Entity                          | `UsuarioMapper.java`                                            |
-| `persistence/model/`      | Entidades JPA que representan tablas                   | `Usuario.java`                                                  |
-| `persistence/repository/` | Interfaces para acceso a datos                         | `UsuarioRepository.java`                                        |
-| `service/`                | Lógica de negocio                                      | `UsuarioService.java` (interfaces)                              |
-| `service/impl/`           | Implementaciones de servicios                          | `UsuarioServiceImpl.java`                                       |
-| `util/`                   | Clases de utilidad o helpers                           | `DateUtils.java`                                                |
+| Carpeta        | Propósito                                              | Ejemplo / Nota                                                  |
+| -------------- | ------------------------------------------------------ | --------------------------------------------------------------- |
+| `config/`      | Configuraciones globales como seguridad, CORS, Swagger | `SecurityConfig.java`, `SwaggerConfig.java`                     |
+| `controller/`  | Controladores REST que exponen los endpoints           | `UserController.java`                                           |
+| `dto/`         | Objetos de transferencia de datos (Request / Response) | `UserRequest.java`, `UserResponse.java`, `RestResponse.java`    |
+| `exception/`   | Manejo centralizado de errores                         | `GlobalExceptionHandler.java`, `ResourceNotFoundException.java` |
+| `mapper/`      | Conversión entre DTO y Entity                          | `UserMapper.java`                                               |
+| `model/`       | Entidades JPA que representan tablas                   | `User.java`                                                     |
+| `repository/`  | Interfaces para acceso a datos                         | `UserRepository.java`                                           |
+| `service/`     | Lógica de negocio                                      | `UserService.java` (interfaces)                                 |
+| `service/impl/` | Implementaciones de servicios                          | `UserServiceImpl.java`                                          |
+| `util/`        | Clases de utilidad o helpers                           | `DateUtils.java`                                                |
 
 **Ejemplo conceptual:**
 
@@ -62,9 +59,8 @@ src/main/java/com/curso/proyecto/
  ├── dto/
  ├── exception/
  ├── mapper/
- ├── persistence/
- │    ├── model/
- │    └── repository/
+ ├── model/
+ ├── repository/
  ├── service/
  │    └── impl/
  ├── config/
@@ -81,24 +77,24 @@ Seguir un estándar de nombres ayuda a mantener el proyecto **legible y consiste
 | Elemento            | Convención                | Ejemplo                             |
 | ------------------- | ------------------------- | ----------------------------------- |
 | Paquetes            | minúsculas                | `com.curso.proyecto.controller`     |
-| Clases              | PascalCase                | `UsuarioServiceImpl`                |
-| Métodos y variables | camelCase                 | `getUsuariosActivos()`              |
-| Constantes          | MAYÚSCULAS con `_`        | `MAX_REINTENTOS`                    |
-| DTOs                | Sufijo Request / Response | `UsuarioRequest`, `UsuarioResponse` |
-| Repositorios        | Sufijo Repository         | `UsuarioRepository`                 |
-| Servicios           | Sufijo Service            | `UsuarioService` (interfaces)       |
+| Clases              | PascalCase                | `UserServiceImpl`                   |
+| Métodos y variables | camelCase                 | `getActiveUsers()`                  |
+| Constantes          | MAYÚSCULAS con `_`        | `MAX_RETRY_ATTEMPTS`                |
+| DTOs                | Sufijo Request / Response | `UserRequest`, `UserResponse`       |
+| Repositorios        | Sufijo Repository         | `UserRepository`                    |
+| Servicios           | Sufijo Service            | `UserService` (interfaces)          |
 
 **Ejemplo conceptual:**
 
 ```java
 // Correcto
-public class UsuarioServiceImpl { ... }
-private String nombreUsuario;
-public static final int MAX_REINTENTOS = 3;
+public class UserServiceImpl { ... }
+private String username;
+public static final int MAX_RETRY_ATTEMPTS = 3;
 
 // Incorrecto
-public class usuarioSERVICE { ... }
-private String Nombre_Usuario;
+public class userSERVICE { ... }
+private String User_Name;
 ```
 
 ---
@@ -134,13 +130,13 @@ DELETE /api/v1/users/{id}   → eliminar un usuario
 **Ejemplo conceptual:**
 
 ```java
-@Operation(summary = "Obtener usuario por ID", description = "Devuelve un usuario dado su ID")
+@Operation(summary = "Get user by ID", description = "Returns a user by their ID")
 @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
-    @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    @ApiResponse(responseCode = "200", description = "User found"),
+    @ApiResponse(responseCode = "404", description = "User not found")
 })
 @GetMapping("/{id}")
-public UsuarioResponse obtener(@PathVariable Long id) {
+public RestResponse<UserResponse> getUser(@PathVariable Long id) {
     return null; // Ejemplo conceptual
 }
 ```
@@ -157,20 +153,20 @@ public UsuarioResponse obtener(@PathVariable Long id) {
 **Ejemplo conceptual:**
 
 ```java
-public class UsuarioRequest {
-    @NotBlank(message = "El nombre es obligatorio")
-    private String nombre;
+public class UserRequest {
+    @NotBlank(message = "Name is required")
+    private String name;
 
-    @Email(message = "Email inválido")
+    @Email(message = "Invalid email")
     private String email;
 
-    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 }
 
-public class UsuarioResponse {
+public class UserResponse {
     private Long id;
-    private String nombre;
+    private String name;
     private String email;
 }
 ```
@@ -188,8 +184,8 @@ public class UsuarioResponse {
 
 ```java
 @PostMapping
-public ApiResponse<UsuarioResponse> crear(@Valid @RequestBody UsuarioRequest request) {
-    return ApiResponse.success("Usuario creado correctamente", null);
+public RestResponse<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
+    return RestResponse.success("User created successfully", null);
 }
 ```
 
@@ -217,13 +213,13 @@ public ApiResponse<UsuarioResponse> crear(@Valid @RequestBody UsuarioRequest req
 
 ```java
 @Mapper(componentModel = "spring")
-public interface UsuarioMapper {
-    Usuario toEntity(UsuarioRequest dto);
-    UsuarioResponse toResponse(Usuario entity);
+public interface UserMapper {
+    User toEntity(UserRequest dto);
+    UserResponse toResponse(User entity);
 
     // Ejemplo de método personalizado
-    default LocalDate mapStringToDate(String fecha) {
-        return LocalDate.parse(fecha, DateTimeFormatter.ISO_DATE);
+    default LocalDate mapStringToDate(String date) {
+        return LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
     }
 }
 ```
@@ -242,14 +238,14 @@ public interface UsuarioMapper {
 
 ```java
 // Interface
-public interface UsuarioService {
-    UsuarioResponse crear(UsuarioRequest request);
-    List<UsuarioResponse> listar();
+public interface UserService {
+    UserResponse createUser(UserRequest request);
+    List<UserResponse> getAllUsers();
 }
 
 // Implementación
 @Service
-public class UsuarioServiceImpl implements UsuarioService {
+public class UserServiceImpl implements UserService {
     // Inyecciones de repositorio y mapper
 }
 ```
@@ -267,32 +263,32 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/usuarios")
-public class UsuarioController {
-    private final UsuarioService usuarioService;
+@RequestMapping("/api/v1/users")
+public class UserController {
+    private final UserService userService;
 
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public ApiResponse<List<UsuarioResponse>> listar() {
-        return ApiResponse.success("Usuarios listados", null);
+    public RestResponse<List<UserResponse>> getAllUsers() {
+        return RestResponse.success("Users listed successfully", null);
     }
 }
 ```
 
 ---
 
-## 🔹 10. Manejo de Errores con ApiResponse (ApiResponse va en DTO)
+## 🔹 10. Manejo de Errores con RestResponse (RestResponse va en DTO)
 
 **Explicación:**
 
 * Usar `@RestControllerAdvice` para centralizar errores.
-* Generar **respuestas uniformes** con `ApiResponse`.
+* Generar **respuestas uniformes** con `RestResponse`.
 * **Flujo completo:**
   1️⃣ Servicio lanza excepción.
-  2️⃣ Controlador invoca servicio y retorna ApiResponse.
+  2️⃣ Controlador invoca servicio y retorna RestResponse.
   3️⃣ `@ControllerAdvice` intercepta excepción y devuelve respuesta uniforme.
 
 **Ejemplo conceptual:**
@@ -305,34 +301,34 @@ public class UserNotFoundException extends RuntimeException {
     }
 }
 
-// Manejo centralizado usando ApiResponse
+// Manejo centralizado usando RestResponse
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // Maneja excepciones de negocio personalizadas
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApiResponse<?>> handleUserNotFound(UserNotFoundException ex) {
-        ApiResponse<?> response = ApiResponse.error("Error de negocio", List.of(ex.getMessage()));
+    public ResponseEntity<RestResponse<?>> handleUserNotFound(UserNotFoundException ex) {
+        RestResponse<?> response = RestResponse.error("Business error", List.of(ex.getMessage()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     // Maneja validaciones de DTO (ej. @Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<?>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<RestResponse<?>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult()
                                 .getFieldErrors()
                                 .stream()
                                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                                 .toList();
 
-        ApiResponse<?> response = ApiResponse.error("Errores de validación", errors);
+        RestResponse<?> response = RestResponse.error("Validation errors", errors);
         return ResponseEntity.badRequest().body(response);
     }
 
     // Maneja cualquier excepción no prevista
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<?>> handleGenericException(Exception ex) {
-        ApiResponse<?> response = ApiResponse.error("Error interno del servidor", List.of(ex.getMessage()));
+    public ResponseEntity<RestResponse<?>> handleGenericException(Exception ex) {
+        RestResponse<?> response = RestResponse.error("Internal server error", List.of(ex.getMessage()));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
@@ -342,28 +338,27 @@ public class GlobalExceptionHandler {
 
 ```java
 // Servicio
-throw new UserNotFoundException("Usuario con id 123 no encontrado");
+throw new UserNotFoundException("User with id 123 not found");
 
 // Controlador
 @GetMapping("/users/{id}")
-public ApiResponse<User> getUser(@PathVariable Long id) {
+public RestResponse<User> getUser(@PathVariable Long id) {
     User user = userService.getUserById(id);
-    return ApiResponse.success("Usuario encontrado", user);
+    return RestResponse.success("User found", user);
 }
 
 // ControllerAdvice intercepta y devuelve
 {
   "success": false,
-  "message":
-  "message": "Error de negocio",
+  "message": "Business error",
   "data": null,
-  "errors": ["Usuario con id 123 no encontrado"]
+  "errors": ["User with id 123 not found"]
 }
 ```
 
 ---
 
-## 🔹 11. API Estándar (Envelope de Respuesta) (ApiResponse va en DTO)
+## 🔹 11. API Estándar (Envelope de Respuesta) (RestResponse va en DTO)
 
 **Explicación:**
 
@@ -372,7 +367,7 @@ public ApiResponse<User> getUser(@PathVariable Long id) {
 ```json
 {
   "success": true,
-  "message": "Operación exitosa",
+  "message": "Operation successful",
   "data": { ... },
   "errors": [ ... ]
 }
@@ -381,14 +376,14 @@ public ApiResponse<User> getUser(@PathVariable Long id) {
 **Ejemplo conceptual en Java:**
 
 ```java
-public class ApiResponse<T> {
+public class RestResponse<T> {
     private boolean success;
     private String message;
     private T data;
     private List<String> errors;
 
-    public static <T> ApiResponse<T> success(String message, T data) {
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> RestResponse<T> success(String message, T data) {
+        RestResponse<T> response = new RestResponse<>();
         response.success = true;
         response.message = message;
         response.data = data;
@@ -396,8 +391,8 @@ public class ApiResponse<T> {
         return response;
     }
 
-    public static <T> ApiResponse<T> error(String message, List<String> errors) {
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> RestResponse<T> error(String message, List<String> errors) {
+        RestResponse<T> response = new RestResponse<>();
         response.success = false;
         response.message = message;
         response.data = null;
@@ -429,16 +424,16 @@ shouldThrowExceptionWhenUserNotFound()
 
 ```java
 test1()
-usuarioTest()
+userTest()
 ```
 
 **Ejemplo conceptual:**
 
 ```java
 @ExtendWith(MockitoExtension.class)
-class UsuarioServiceTest {
-    @Mock private UsuarioRepository repository;
-    @InjectMocks private UsuarioServiceImpl service;
+class UserServiceTest {
+    @Mock private UserRepository repository;
+    @InjectMocks private UserServiceImpl service;
 
     @Test
     void shouldReturnUserWhenUserExists() {
@@ -479,11 +474,71 @@ export JWT_SECRET=mi_secreto
 
 ---
 
-Perfecto, Davide. Aquí tienes una versión más específica para **commits en español**, siguiendo tu formato y con ejemplos claros de lo que se podría hacer en un proyecto Spring Boot usando MapStruct:
+## 🔹 14. Gradle Configuration
+
+**Explicación:**
+
+* Usar Gradle como sistema de construcción para gestionar dependencias y tareas del proyecto.
+* Configuración en `build.gradle` para Spring Boot con las librerías recomendadas.
+
+**Ejemplo conceptual de build.gradle:**
+
+```gradle
+plugins {
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+}
+
+group = 'com.curso'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    
+    compileOnly 'org.projectlombok:lombok'
+    
+    runtimeOnly 'org.postgresql:postgresql'
+    
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+```
+
+**Comandos Gradle útiles:**
+
+```bash
+./gradlew build          # Construir el proyecto
+./gradlew bootRun        # Ejecutar la aplicación
+./gradlew test           # Ejecutar tests
+./gradlew clean          # Limpiar archivos generados
+```
 
 ---
 
-## 🔹 14. Commits
+## 🔹 15. Commits
 
 **Explicación:**
 
@@ -511,7 +566,7 @@ style: ajustar formato de los mappers según convención del equipo
 
 ---
 
-## 🔹 15. Pull Request
+## 🔹 16. Pull Request
 
 ### 🔹 Plantilla de Pull Request (PR)
 
@@ -567,7 +622,7 @@ feat: agregar mapper para convertir User a UserDTO
 - <Notas sobre migraciones, dependencias, PRs relacionados, etc.>
 ```
 
-## 🔹 16. Ramas (Branching Strategy)
+## 🔹 17. Ramas (Branching Strategy)
 
 **Explicación:**  
 El manejo de ramas debe ser **claro, consistente y alineado con la convención de commits**.  
@@ -670,10 +725,3 @@ Nunca trabajar directo en main.
 * [ ] Pruebas unitarias agregadas o actualizadas
 * [ ] Documentación actualizada (si aplica)
 * [ ] Revisado por al menos un compañero del equipo
-
-
-
-
-
-
-
